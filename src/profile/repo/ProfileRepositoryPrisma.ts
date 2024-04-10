@@ -27,22 +27,27 @@ export class ProfileRepositoryPrisma implements IProfileRepository {
     return this.prisma.profile.findFirst({ where: { id } });
   }
 
-  searchProfiles(username: string, query: string): Promise<Profile[]> {
-    return this.prisma.profile.findMany({
-      where: {
-        AND: [
-          {
-            username: {
-              startsWith: query,
+  async searchProfiles(username: string, query?: string): Promise<Profile[]> {
+    if ((query?.length ?? 0) > 0) {
+      return await this.prisma.profile.findMany({
+        where: {
+          AND: [
+            {
+              username: {
+                startsWith: query,
+              },
             },
-          },
-          {
-            username: {
-              not: username,
+            {
+              NOT: {
+                username: {
+                  startsWith: username,
+                },
+              },
             },
-          },
-        ],
-      },
-    });
+          ],
+        },
+      });
+    }
+    return [];
   }
 }
