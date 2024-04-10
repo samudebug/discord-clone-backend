@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Patch,
+  Query,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -26,5 +27,10 @@ export class ProfileController {
     @Body(ValidationPipe) profile: UpdateProfileDTO,
   ) {
     return this.service.upsertUser(uid, profile);
+  }
+
+  @Get('')
+  async searchProfiles(@UserId() uid: string, @Query('search') query?: string) {
+    return this.service.searchProfiles(uid, query);
   }
 }

@@ -10,4 +10,6 @@ export abstract class IProfileRepository {
   abstract getProfileByUid(uid: string): Promise<Profile>;
 
   abstract getProfile(id: string): Promise<Profile>;
+
+  abstract searchProfiles(username: string, query: string): Promise<Profile[]>;
 }

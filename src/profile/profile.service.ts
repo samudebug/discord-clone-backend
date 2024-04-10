@@ -27,4 +27,9 @@ export class ProfileService {
     if (!profile) throw new NotFoundException('This profile does not exist');
     return profile;
   }
+
+  async searchProfiles(uid: string, query: string = '') {
+    const { username } = await this.getProfileByUid(uid);
+    return this.repo.searchProfiles(username, query);
+  }
 }
