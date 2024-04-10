@@ -28,8 +28,8 @@ export class ProfileService {
     return profile;
   }
 
-  async searchProfiles(uid: string, query?: string) {
+  async searchProfiles(uid: string, query?: string, page?: number) {
     const { username } = await this.getProfileByUid(uid);
-    return this.repo.searchProfiles(username, query);
+    return this.repo.searchProfiles(username, query, page);
   }
 }

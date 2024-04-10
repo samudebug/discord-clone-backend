@@ -26,9 +26,9 @@ export class ChatsService {
     return result;
   }
 
-  async getChatsByProfileId(uid: string) {
+  async getChatsByProfileId(uid: string, page?: number) {
     const { id: profileId } = await this.profileService.getProfileByUid(uid);
-    return this.repo.getChatsByProfileId(profileId);
+    return this.repo.getChatsByProfileId(profileId, page);
   }
 
   async createMessage(
@@ -47,8 +47,8 @@ export class ChatsService {
     return result;
   }
 
-  async getMessages(chatId: string, uid: string) {
+  async getMessages(chatId: string, uid: string, page?: number) {
     await this.getChat(chatId, uid);
-    return this.messageService.findMessagesByChat(chatId);
+    return this.messageService.findMessagesByChat(chatId, page);
   }
 }

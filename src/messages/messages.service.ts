@@ -9,8 +9,8 @@ import { Attachment, AttachmentType } from '@prisma/client';
 export class MessagesService {
   constructor(private repo: IMessageRepository) {}
 
-  async findMessagesByChat(chatId: string) {
-    return await this.repo.findMessagesByChat(chatId);
+  async findMessagesByChat(chatId: string, page?: number) {
+    return await this.repo.findMessagesByChat(chatId, page);
   }
 
   async createMessage(

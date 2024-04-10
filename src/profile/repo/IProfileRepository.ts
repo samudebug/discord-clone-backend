@@ -1,5 +1,6 @@
 import { Profile } from '@prisma/client';
 import { UpdateProfileDTO } from '../dto/update-profile-dto';
+import { PaginatedResult } from 'src/models/paginatedResult';
 
 export abstract class IProfileRepository {
   abstract upsertProfile(
@@ -11,5 +12,9 @@ export abstract class IProfileRepository {
 
   abstract getProfile(id: string): Promise<Profile>;
 
-  abstract searchProfiles(username: string, query?: string): Promise<Profile[]>;
+  abstract searchProfiles(
+    username: string,
+    query?: string,
+    page?: number,
+  ): Promise<PaginatedResult<Profile>>;
 }

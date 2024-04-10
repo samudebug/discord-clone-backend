@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { ChatsService } from './chats.service';
@@ -16,8 +17,8 @@ export class ChatsController {
   constructor(private service: ChatsService) {}
 
   @Get('')
-  getChats(@UserId() uid: string) {
-    return this.service.getChatsByProfileId(uid);
+  getChats(@UserId() uid: string, @Query('page') page?: number) {
+    return this.service.getChatsByProfileId(uid, page);
   }
 
   @Get(':id')
@@ -40,7 +41,11 @@ export class ChatsController {
   }
 
   @Get(':id/messages')
-  getMessages(@Param('id') chatId: string, @UserId() uid: string) {
-    return this.service.getMessages(chatId, uid);
+  getMessages(
+    @Param('id') chatId: string,
+    @UserId() uid: string,
+    @Query('page') page?: number,
+  ) {
+    return this.service.getMessages(chatId, uid, page);
   }
 }

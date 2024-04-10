@@ -30,7 +30,11 @@ export class ProfileController {
   }
 
   @Get('')
-  async searchProfiles(@UserId() uid: string, @Query('search') query?: string) {
-    return this.service.searchProfiles(uid, query);
+  async searchProfiles(
+    @UserId() uid: string,
+    @Query('search') query?: string,
+    @Query('page') page?: number,
+  ) {
+    return this.service.searchProfiles(uid, query, page);
   }
 }

@@ -2,6 +2,7 @@ import { Profile } from '@prisma/client';
 import { UpdateProfileDTO } from '../dto/update-profile-dto';
 import { IProfileRepository } from './IProfileRepository';
 import { PrismaService } from '../../services/prisma/prisma.service';
+import { PaginatedResult } from 'src/models/paginatedResult';
 
 export class ProfileRepositoryPrisma implements IProfileRepository {
   constructor(private prisma: PrismaService) {}
@@ -27,9 +28,13 @@ export class ProfileRepositoryPrisma implements IProfileRepository {
     return this.prisma.profile.findFirst({ where: { id } });
   }
 
-  async searchProfiles(username: string, query?: string): Promise<Profile[]> {
+  async searchProfiles(
+    username: string,
+    query?: string,
+    page = 1,
+  ): Promise<PaginatedResult<Profile>> {
     if ((query?.length ?? 0) > 0) {
-      return await this.prisma.profile.findMany({
+      const total = await this.prisma.profile.count({
         where: {
           AND: [
             {
@@ -47,7 +52,36 @@ export class ProfileRepositoryPrisma implements IProfileRepository {
           ],
         },
       });
+      const results = await this.prisma.profile.findMany({
+        where: {
+          AND: [
+            {
+              username: {
+                startsWith: query,
+              },
+            },
+            {
+              NOT: {
+                username: {
+                  startsWith: username,
+                },
+              },
+            },
+          ],
+        },
+        take: 30,
+        skip: (page - 1) * 30,
+      });
+      return {
+        page,
+        total,
+        results,
+      };
     }
-    return [];
+    return {
+      page: 1,
+      total: 0,
+      results: [],
+    };
   }
 }
