@@ -6,6 +6,7 @@ import { IChatRepository } from './repo/IChatRepository';
 import { ChatRepositoryPrisma } from './repo/ChatRepositoryPrisma';
 import { ProfileModule } from 'src/profile/profile.module';
 import { MessagesModule } from 'src/messages/messages.module';
+import { ChatsGateway } from './chats.gateway';
 
 @Module({
   imports: [ProfileModule, MessagesModule],
@@ -17,6 +18,7 @@ import { MessagesModule } from 'src/messages/messages.module';
       useFactory: (prisma: PrismaService) => new ChatRepositoryPrisma(prisma),
       inject: [PrismaService],
     },
+    ChatsGateway,
   ],
   controllers: [ChatsController],
 })

@@ -4,6 +4,7 @@ import { IChatRepository } from './repo/IChatRepository';
 import { ProfileService } from '../profile/profile.service';
 import { MessagesService } from 'src/messages/messages.service';
 import { CreateMessageRequestDTO } from 'src/messages/dto/create-message-request.dto';
+import { ChatsGateway } from './chats.gateway';
 
 @Injectable()
 export class ChatsService {
@@ -11,6 +12,7 @@ export class ChatsService {
     private repo: IChatRepository,
     private profileService: ProfileService,
     private messageService: MessagesService,
+    private chatGateway: ChatsGateway,
   ) {}
   createChat(createRequest: CreateChatDTO) {
     return this.repo.createChat(createRequest);
@@ -36,7 +38,13 @@ export class ChatsService {
   ) {
     const { id: profileId } = await this.profileService.getProfileByUid(uid);
     await this.getChat(chatId, uid);
-    return this.messageService.createMessage(message, chatId, profileId);
+    const result = await this.messageService.createMessage(
+      message,
+      chatId,
+      profileId,
+    );
+    this.chatGateway.emitMessage(`chat:${chatId}`, result);
+    return result;
   }
 
   async getMessages(chatId: string, uid: string) {
