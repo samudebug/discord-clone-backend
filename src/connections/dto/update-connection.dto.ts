@@ -1,7 +1,7 @@
-import { Equals, IsNotEmpty } from 'class-validator';
+import { IsIn, IsNotEmpty } from 'class-validator';
 
 export class UpdateConnectionDTO {
   @IsNotEmpty({ message: 'Status must not be empty' })
-  @Equals('APPROVED', { message: 'Status is invalid' })
+  @IsIn(['APPROVED', 'BLOCKED'], { message: 'Status is invalid' })
   status: string;
 }

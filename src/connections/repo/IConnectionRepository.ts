@@ -12,4 +12,5 @@ export abstract class IConnectionRepository {
     profileId: string,
     update: UpdateConnectionDTO,
   ): Promise<Connection>;
+  abstract getBlockings(from: string, to: string): Promise<Connection[]>;
 }

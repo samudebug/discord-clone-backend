@@ -52,4 +52,15 @@ export class ConnectionRepositoryPrisma implements IConnectionRepository {
       },
     });
   }
+
+  getBlockings(from: string, to: string): Promise<Connection[]> {
+    return this.prisma.connection.findMany({
+      where: {
+        profileIds: {
+          equals: [to, from],
+        },
+        status: ConnectionStatus.BLOCKED,
+      },
+    });
+  }
 }

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { IConnectionRepository } from './repo/IConnectionRepository';
 import { ProfileService } from 'src/profile/profile.service';
 import { ConnectionStatus } from '@prisma/client';
@@ -14,6 +18,9 @@ export class ConnectionsService {
   async createConnection(uid: string, to: string) {
     const { id: from } = await this.profileService.getProfileByUid(uid);
     await this.profileService.getProfileById(to);
+    const blockings = await this.getBlockings(uid, to);
+    if (blockings.length > 0)
+      throw new UnauthorizedException('This profile is blocked');
     return this.repo.createConnection(from, to);
   }
 
@@ -37,7 +44,13 @@ export class ConnectionsService {
   async updateConnection(id: string, uid: string, update: UpdateConnectionDTO) {
     const { id: profileId } = await this.profileService.getProfileByUid(uid);
 
-    await this.getById(id, profileId);
+    await this.getById(id, uid);
     return this.repo.updateConnection(id, profileId, update);
+  }
+
+  async getBlockings(uid: string, to: string) {
+    const { id: from } = await this.profileService.getProfileByUid(uid);
+    await this.profileService.getProfileById(to);
+    return this.repo.getBlockings(from, to);
   }
 }

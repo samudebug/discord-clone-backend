@@ -28,6 +28,7 @@ model Profile {
 enum ConnectionStatus {
   PENDING
   APPROVED
+  BLOCKED
 }
 
 model Connection {
