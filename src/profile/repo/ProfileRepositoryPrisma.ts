@@ -22,4 +22,8 @@ export class ProfileRepositoryPrisma implements IProfileRepository {
       },
     });
   }
+
+  getProfile(id: string): Promise<Profile> {
+    return this.prisma.profile.findFirst({ where: { id } });
+  }
 }

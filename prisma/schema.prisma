@@ -14,11 +14,26 @@ datasource db {
 }
 
 model Profile {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  uid String @unique
-  username String @unique
-  displayName String
-  photoUrl String?
-  completedOnboarding Boolean @default(false)
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  uid                 String   @unique
+  username            String   @unique
+  displayName         String
+  photoUrl            String?
+  completedOnboarding Boolean  @default(false)
+  connectionIds       String[] @db.ObjectId
+
+  connections Connection[] @relation(fields: [connectionIds], references: [id])
 }
 
+enum ConnectionStatus {
+  PENDING
+  APPROVED
+}
+
+model Connection {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileIds String[] @db.ObjectId
+  status ConnectionStatus @default(PENDING)
+
+  profiles Profile[] @relation(fields: [profileIds], references: [id])
+}

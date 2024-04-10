@@ -18,7 +18,13 @@ export class ProfileService {
 
   async getProfileByUid(uid: string) {
     const result = this.repo.getProfileByUid(uid);
-    if (!result) throw new NotFoundException('Profile does not exist');
+    if (!result) throw new NotFoundException('This profile does not exist');
     return result;
+  }
+
+  async getProfileById(id: string) {
+    const profile = await this.repo.getProfile(id);
+    if (!profile) throw new NotFoundException('This profile does not exist');
+    return profile;
   }
 }

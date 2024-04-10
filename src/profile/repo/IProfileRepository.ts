@@ -8,4 +8,6 @@ export abstract class IProfileRepository {
   ): Promise<Profile>;
 
   abstract getProfileByUid(uid: string): Promise<Profile>;
+
+  abstract getProfile(id: string): Promise<Profile>;
 }

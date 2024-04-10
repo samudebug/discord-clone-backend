@@ -17,5 +17,6 @@ import { ProfileController } from './profile.controller';
     },
   ],
   controllers: [ProfileController],
+  exports: [ProfileService],
 })
 export class ProfileModule {}
