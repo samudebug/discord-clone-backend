@@ -32,4 +32,9 @@ export class ProfileService {
     const { username } = await this.getProfileByUid(uid);
     return this.repo.searchProfiles(username, query, page);
   }
+
+  async checkUsername(username: string) {
+    const available = await this.repo.checkUsername(username);
+    return { available };
+  }
 }

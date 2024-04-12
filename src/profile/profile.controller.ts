@@ -37,4 +37,9 @@ export class ProfileController {
   ) {
     return this.service.searchProfiles(uid, query, page);
   }
+
+  @Get('checkUsername')
+  async checkUsername(@Query('username') username: string) {
+    return this.service.checkUsername(username);
+  }
 }

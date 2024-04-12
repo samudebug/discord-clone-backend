@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { CreateChatDTO } from './dto/create-chat.dto';
 import { IChatRepository } from './repo/IChatRepository';
 import { ProfileService } from '../profile/profile.service';
@@ -12,6 +17,7 @@ export class ChatsService {
     private repo: IChatRepository,
     private profileService: ProfileService,
     private messageService: MessagesService,
+    @Inject(forwardRef(() => ChatsGateway))
     private chatGateway: ChatsGateway,
   ) {}
   createChat(createRequest: CreateChatDTO) {
@@ -43,7 +49,7 @@ export class ChatsService {
       chatId,
       profileId,
     );
-    this.chatGateway.emitMessage(`chat:${chatId}`, result);
+    this.chatGateway.emitMessage(chatId, `newMessage`, result);
     return result;
   }
 

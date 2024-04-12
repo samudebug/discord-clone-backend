@@ -1,6 +1,6 @@
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { IMessageRepository } from './IMessageRepository';
-import { Message } from '@prisma/client';
+import { Message, Profile } from '@prisma/client';
 import { CreateMessageDTO } from '../dto/create-message.dto';
 import { PaginatedResult } from 'src/models/paginatedResult';
 
@@ -9,7 +9,9 @@ export class MessageRepositoryPrisma implements IMessageRepository {
   async findMessagesByChat(
     chatId: string,
     page = 1,
-  ): Promise<PaginatedResult<Message>> {
+  ): Promise<
+    PaginatedResult<Omit<Message, 'chatId' | 'senderId'> & { sender: Profile }>
+  > {
     const total = await this.prisma.message.count({
       where: {
         chatId,
@@ -21,6 +23,15 @@ export class MessageRepositoryPrisma implements IMessageRepository {
     const results = await this.prisma.message.findMany({
       where: {
         chatId,
+      },
+      select: {
+        sender: true,
+        id: true,
+        content: true,
+        attachment: true,
+        attachmentUrl: true,
+        createdAt: true,
+        updatedAt: true,
       },
       orderBy: {
         createdAt: 'desc',
@@ -41,7 +52,7 @@ export class MessageRepositoryPrisma implements IMessageRepository {
     chatId,
     senderId,
     attachmentUrl,
-  }: CreateMessageDTO): Promise<Message> {
+  }: CreateMessageDTO): Promise<Message & { sender: Profile }> {
     return this.prisma.message.create({
       data: {
         content,
@@ -49,6 +60,9 @@ export class MessageRepositoryPrisma implements IMessageRepository {
         attachmentUrl,
         chatId,
         senderId,
+      },
+      include: {
+        sender: true,
       },
     });
   }

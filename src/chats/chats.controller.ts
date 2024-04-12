@@ -5,14 +5,17 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { ChatsService } from './chats.service';
 import { UserId } from '../decorators/userId.decorator';
 import { CreateChatDTO } from './dto/create-chat.dto';
 import { CreateMessageRequestDTO } from 'src/messages/dto/create-message-request.dto';
+import { AuthGuard } from 'src/guards/auth/auth.guard';
 
 @Controller('chats')
+@UseGuards(AuthGuard)
 export class ChatsController {
   constructor(private service: ChatsService) {}
 

@@ -84,4 +84,13 @@ export class ProfileRepositoryPrisma implements IProfileRepository {
       results: [],
     };
   }
+
+  async checkUsername(username: string): Promise<boolean> {
+    const total = await this.prisma.profile.count({
+      where: {
+        username,
+      },
+    });
+    return total == 0;
+  }
 }

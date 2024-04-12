@@ -17,4 +17,6 @@ export abstract class IProfileRepository {
     query?: string,
     page?: number,
   ): Promise<PaginatedResult<Profile>>;
+
+  abstract checkUsername(username: string): Promise<boolean>;
 }
