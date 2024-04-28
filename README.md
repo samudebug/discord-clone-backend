@@ -1,73 +1,45 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Chat APP (Discord Clone)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is the backend for a chat app with features similar to Discord. You can check the repository for the mobile app [here](https://github.com/samudebug/discord-clone-app)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Structure
+The app is built using:
+- [Nest](https://github.com/nestjs/nest)
+- [Mongo.DB](https://www.mongodb.com/)
+- [Prisma](https://github.com/prisma/prisma)
+- [Socket.io](https://github.com/socketio/socket.io)
+- [Firebase Authentication](https://firebase.google.com/docs/auth)
 
-## Description
+### Features
+- [x] Chats
+- [x] Profiles
+- [x] Messages
+- [x] Attachments
+- [x] Real Time Chat
+- [ ] Servers
+- [ ] Channels
+- [ ] Roles
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Running the App
 
-## Installation
+Install the dependencies using:
 
-```bash
-$ npm install
+```sh
+npm install
 ```
 
-## Running the app
+Setup the .env file using [.env.example](./.env.example) as a base
 
-```bash
-# development
-$ npm run start
+- DATABASE_URL: A MongoDB database URL
+- FIREBASE_SERVICE_ACCOUNT: The JSON of a Firebase/GCP service acccount encoded as Base64
+- GOOGLE_CLOUD_PROJECT: The ID of the Firebase/GCP project
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+To run the app locally, run:
+```sh
+npm run start:dev
 ```
 
-## Test
+##### About DB
+Prisma is very picky about how your MongoDB is set up. Using [MongoDB Atlas](https://www.mongodb.com/atlas) is fine, but if you want to use your own deployment, you have to setup Replica Sets on your MongoDB.
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Thankfully, this project also includes a prepared `docker-compose.yml` file that runs a container with a MongoDB completely set up.
