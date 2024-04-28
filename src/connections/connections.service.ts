@@ -24,10 +24,7 @@ export class ConnectionsService {
     return this.repo.createConnection(from, to);
   }
 
-  async getConnections(
-    uid: string,
-    status: ConnectionStatus = ConnectionStatus.PENDING,
-  ) {
+  async getConnections(uid: string, status?: ConnectionStatus) {
     const { id: profileId } = await this.profileService.getProfileByUid(uid);
     return this.repo.getConnections(profileId, status);
   }
@@ -52,5 +49,17 @@ export class ConnectionsService {
     const { id: from } = await this.profileService.getProfileByUid(uid);
     await this.profileService.getProfileById(to);
     return this.repo.getBlockings(from, to);
+  }
+  /**
+   *
+   * @param id The ID of the connection
+   * @param uid The ID of the User
+   *
+   * The Profile can only delete a Connection if it participates on the Connection.
+   */
+  async deleteConnection(id: string, uid: string) {
+    await this.getById(id, uid);
+    const { id: profileId } = await this.profileService.getProfileByUid(uid);
+    return await this.repo.deleteConnection(id, profileId);
   }
 }

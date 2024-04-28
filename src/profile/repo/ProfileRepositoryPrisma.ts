@@ -1,4 +1,4 @@
-import { Profile } from '@prisma/client';
+import { ConnectionStatus, Profile } from '@prisma/client';
 import { UpdateProfileDTO } from '../dto/update-profile-dto';
 import { IProfileRepository } from './IProfileRepository';
 import { PrismaService } from '../../services/prisma/prisma.service';
@@ -32,7 +32,9 @@ export class ProfileRepositoryPrisma implements IProfileRepository {
     username: string,
     query?: string,
     page = 1,
-  ): Promise<PaginatedResult<Profile>> {
+  ): Promise<
+    PaginatedResult<Profile & { connections: { status: ConnectionStatus }[] }>
+  > {
     if ((query?.length ?? 0) > 0) {
       const total = await this.prisma.profile.count({
         where: {
@@ -69,11 +71,34 @@ export class ProfileRepositoryPrisma implements IProfileRepository {
             },
           ],
         },
+        include: {
+          connections: {
+            where: {
+              AND: [
+                {
+                  profiles: {
+                    some: {
+                      username,
+                    },
+                  },
+                },
+                {
+                  NOT: {
+                    status: ConnectionStatus.BLOCKED,
+                  },
+                },
+              ],
+            },
+            select: {
+              status: true,
+            },
+          },
+        },
         take: 30,
         skip: (page - 1) * 30,
       });
       return {
-        page,
+        page: parseInt(page as unknown as string),
         total,
         results,
       };

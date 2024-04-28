@@ -32,9 +32,9 @@ export class ChatsService {
     return result;
   }
 
-  async getChatsByProfileId(uid: string, page?: number) {
+  async getChatsByProfileId(uid: string, page?: number, chatWith?: string) {
     const { id: profileId } = await this.profileService.getProfileByUid(uid);
-    return this.repo.getChatsByProfileId(profileId, page);
+    return this.repo.getChatsByProfileId(profileId, page, chatWith);
   }
 
   async createMessage(
@@ -56,5 +56,11 @@ export class ChatsService {
   async getMessages(chatId: string, uid: string, page?: number) {
     await this.getChat(chatId, uid);
     return this.messageService.findMessagesByChat(chatId, page);
+  }
+
+  async deleteMessage(chatId: string, messageId: string, uid: string) {
+    await this.getChat(chatId, uid);
+    const { id: profileId } = await this.profileService.getProfileByUid(uid);
+    return this.messageService.deleteMessage(chatId, messageId, profileId);
   }
 }

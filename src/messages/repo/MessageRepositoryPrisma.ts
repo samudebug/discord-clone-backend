@@ -6,6 +6,21 @@ import { PaginatedResult } from 'src/models/paginatedResult';
 
 export class MessageRepositoryPrisma implements IMessageRepository {
   constructor(private prisma: PrismaService) {}
+  async deleteMessage(
+    chatId: string,
+    messageId: string,
+    profileId: string,
+  ): Promise<void> {
+    await this.prisma.message.delete({
+      where: {
+        id: messageId,
+        chatId,
+        sender: {
+          id: profileId,
+        },
+      },
+    });
+  }
   async findMessagesByChat(
     chatId: string,
     page = 1,

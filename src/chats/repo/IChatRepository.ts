@@ -17,6 +17,7 @@ export abstract class IChatRepository {
   abstract getChatsByProfileId(
     profileId: string,
     page?: number,
+    chatWith?: string,
   ): Promise<
     PaginatedResult<
       Omit<Chat, 'memberIds' | 'messageIds'> & {

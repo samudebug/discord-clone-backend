@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -25,7 +26,11 @@ export class ConnectionsController {
     @UserId() uid: string,
     @Query('status') status?: ConnectionStatus,
   ) {
-    return this.service.getConnections(uid, status);
+    let connectionStatus: ConnectionStatus;
+    if (status) {
+      connectionStatus = ConnectionStatus[status];
+    }
+    return this.service.getConnections(uid, connectionStatus);
   }
 
   @Post('')
@@ -43,5 +48,10 @@ export class ConnectionsController {
     @Param('id') id: string,
   ) {
     return this.service.updateConnection(id, uid, update);
+  }
+
+  @Delete(':id')
+  deleteConnection(@UserId() uid: string, @Param('id') id: string) {
+    return this.service.deleteConnection(id, uid);
   }
 }

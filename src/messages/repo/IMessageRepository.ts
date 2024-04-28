@@ -13,4 +13,10 @@ export abstract class IMessageRepository {
   abstract createMessage(
     request: CreateMessageDTO,
   ): Promise<Message & { sender: Profile }>;
+
+  abstract deleteMessage(
+    chatId: string,
+    messageId: string,
+    profileId: string,
+  ): Promise<void>;
 }

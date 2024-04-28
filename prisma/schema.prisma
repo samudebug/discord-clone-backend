@@ -37,6 +37,7 @@ enum ConnectionStatus {
 
 model Connection {
   id         String           @id @default(auto()) @map("_id") @db.ObjectId
+  from       String           @db.ObjectId
   profileIds String[]         @db.ObjectId
   status     ConnectionStatus @default(PENDING)
 
@@ -55,7 +56,7 @@ model Chat {
 model Message {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
   content       String
-  attachmentUrl String @default("")
+  attachmentUrl String      @default("")
   attachment    Attachment?
   chatId        String      @db.ObjectId
   senderId      String      @db.ObjectId

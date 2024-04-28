@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -20,8 +21,12 @@ export class ChatsController {
   constructor(private service: ChatsService) {}
 
   @Get('')
-  getChats(@UserId() uid: string, @Query('page') page?: number) {
-    return this.service.getChatsByProfileId(uid, page);
+  getChats(
+    @UserId() uid: string,
+    @Query('page') page?: number,
+    @Query('with') chatWith?: string,
+  ) {
+    return this.service.getChatsByProfileId(uid, page, chatWith);
   }
 
   @Get(':id')
@@ -50,5 +55,14 @@ export class ChatsController {
     @Query('page') page?: number,
   ) {
     return this.service.getMessages(chatId, uid, page);
+  }
+
+  @Delete(':id/messages/:messageId')
+  deleteMessage(
+    @Param('id') chatId: string,
+    @Param('messageId') messageId: string,
+    @UserId() uid: string,
+  ) {
+    return this.service.deleteMessage(chatId, messageId, uid);
   }
 }

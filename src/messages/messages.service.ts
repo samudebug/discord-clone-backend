@@ -36,6 +36,10 @@ export class MessagesService {
     return await this.repo.createMessage(createRequest);
   }
 
+  async deleteMessage(chatId: string, messageId: string, profileId: string) {
+    return this.repo.deleteMessage(chatId, messageId, profileId);
+  }
+
   private async mapAttachment(url: string) {
     const info = await axios.head(url);
     const contentType = info.headers['content-type'].toString();

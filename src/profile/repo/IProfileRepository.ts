@@ -1,4 +1,4 @@
-import { Profile } from '@prisma/client';
+import { ConnectionStatus, Profile } from '@prisma/client';
 import { UpdateProfileDTO } from '../dto/update-profile-dto';
 import { PaginatedResult } from 'src/models/paginatedResult';
 
@@ -16,7 +16,9 @@ export abstract class IProfileRepository {
     username: string,
     query?: string,
     page?: number,
-  ): Promise<PaginatedResult<Profile>>;
+  ): Promise<
+    PaginatedResult<Profile & { connections: { status: ConnectionStatus }[] }>
+  >;
 
   abstract checkUsername(username: string): Promise<boolean>;
 }

@@ -49,6 +49,7 @@ export class ChatRepositoryPrisma implements IChatRepository {
   async getChatsByProfileId(
     profileId: string,
     page = 1,
+    chatWith?: string,
   ): Promise<
     PaginatedResult<
       Omit<Chat, 'memberIds' | 'messageIds'> & {
@@ -57,17 +58,21 @@ export class ChatRepositoryPrisma implements IChatRepository {
       }
     >
   > {
+    const query = [profileId];
+    if (chatWith) {
+      query.push(chatWith);
+    }
     const total = await this.prisma.chat.count({
       where: {
         memberIds: {
-          has: profileId,
+          hasSome: query,
         },
       },
     });
     const results = await this.prisma.chat.findMany({
       where: {
         memberIds: {
-          has: profileId,
+          hasSome: query,
         },
       },
       select: {
@@ -98,7 +103,7 @@ export class ChatRepositoryPrisma implements IChatRepository {
       skip: (page - 1) * 30,
     });
     return {
-      page,
+      page: parseInt(page as unknown as string, 10),
       results,
       total,
     };
